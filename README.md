@@ -1,227 +1,224 @@
 # 🏥 Hospital Emergency Room Analysis
+Excel • Power Query • Power Pivot • DAX • Data Modelling • Dashboarding
 
-## 📑 The Table Of Contents
-
-- [Purpose](#purpose)
-- [Performance Indicators](#performance-indicators)
-- [Data Overview](#data-overview)
-- [Initial Data Observations](#initial-data-observations)
-- [Data Loading](#data-loading)
-- [Data Cleaning And Transformation](#data-cleaning-and-transformation)
-- [Data Exploration And Key Insights](#data-exploration-and-key-insights)
-- [Dashboard Creation](#dashboard-creation)
+A complete end-to-end Excel analytics project analyzing 9,216 Emergency Room visits to uncover operational bottlenecks, wait-time patterns, demographic trends, and satisfaction scores. Built entirely in Microsoft Excel using Power Query, Data Model, PivotTables, and DAX.
 
 ---
 
-## 🎯 Purpose
+## 📌 Dashboard Preview
 
-
-In the high-pressure setting of a hospital emergency room, data-driven decisions can mean the difference between delay and decisive action. This project delivers a fully interactive analytics dashboard built exclusively in Microsoft Excel, using a powerful combination of Power Query, Power Pivot, DAX formulas, and PivotTables to uncover insights into patient flow, wait times, and service quality.
-
-Designed with hospital decision-makers in mind, the dashboard transforms raw, unstructured data into a clear, filterable interface—supporting smarter resource allocation, improved triage strategies, and a deeper understanding of patient experience. All features were developed using Excel's built-in capabilities, making this solution scalable and accessible without the need for external BI platforms.
+![Dashboard](Hospital%20Emergency%20Room%20Dashboard.png)
 
 ---
 
-## 📊 Performance Indicators
+## 📑 Table of Contents
 
-
-### Primary
-   - **Patient Volume**: Total number of individuals visiting the ER each day.
-   - **Average Wait Time**: Time elapsed between patient check-in and initial medical consultation.
-   - **Patient Satisfaction Score**: Average satisfaction rating provided by the patients to access the service quality.
-
-### Secondary
-  - **Admission Status**: Breakdown of patients admitted versus not admitted.
-  - **Age Distribution**: Grouped age ranges for demographic and clinical analysis.
-  - **Wait Time Analysis**: Number of patients attended within 30 minutes versus those who waited longer.
-  - **Gender Distribution**: Total patient count segmented by gender (Male/Female).
-  - **Department Referrals**: Identification of departments generating the highest number of ER referrals.
-
----
-
-## 📁 Data Overview
-
-This project is based on a publicly available dataset sourced from this GitHub [repository](https://raw.githubusercontent.com/SatishDhawale/Hospital_Emergency_Room_Dashboard/refs/heads/main/Hospital%20Emergency%20Room%20Data.csv). The dataset contains 9,217 records and 11 columns, each representing key attributes of emergency room visits such as patient demographics, wait times, admission status, and satisfaction scores.
+- [Project Overview](#project-overview)
+- [Business Problem](#business-problem)
+- [Objectives](#objectives)
+- [Dataset Overview](#dataset-overview)
+- [Data Cleaning and Transformation](#data-cleaning-and-transformation)
+- [DAX Measures](#dax-measures)
+- [Key Insights](#key-insights)
+- [Dashboard Features](#dashboard-features)
+- [Project Files](#project-files)
+- [How to Use](#how-to-use)
+- [Limitations](#limitations)
+- [Future Improvements](#future-improvements)
 
 ---
 
-### 🧾 Dataset Summary
- - Source: Original GitHub commit
- - Format: CSV (Comma-Separated Values)
- - Rows: 9,217 (including header)
- - Columns: 11
- - Time Period Covered: April 2023 to October 2024 (based on admission dates)
+## 📘 Project Overview
+Emergency Rooms operate in high-pressure environments where delays directly affect patient care.  
+This project transforms a raw CSV dataset into an interactive Excel dashboard to analyze:
+
+- Patient volume  
+- Admission decisions  
+- Wait-time performance  
+- Demographic patterns  
+- Referral sources  
+- Satisfaction levels  
 
 ---
 
-## 🔍 Initial Data Observations
+## ❗ Business Problem
+Hospital teams need answers to questions such as:
 
+- Why are wait times high?
+- Which demographics visit the ER most?
+- Are admissions balanced?
+- Which departments generate the most referrals?
+- Does wait time affect satisfaction?
 
-During the initial review of the raw dataset, several data quality and formatting issues were identified that required transformation for accurate analysis:
-
- - Date-Time Formatting: The Patient Admission Date column contained both date and time, though only the date is relevant for analysis.
- - Name Structure: The First Name column included only initials, while the Last Name column provided full surnames, split across two fields.
- - Gender Normalization: The Gender column had inconsistent formats such as “Male”, “M”, “Female”, and “F”.
- - Age Grouping: Patient ages were listed as raw numbers without age ranges needed for grouped demographic insights.
- - Admission Status: The Admission Flag column used Boolean values (“True”/“False”), which may not be easily interpretable.
- - Wait Time Categorization: There was no indication of whether patients were attended to within or beyond a specific time threshold, such as 30 minutes.
- - Duplicate Column: Two Wait Time columns were present, leading to redundancy.
- - Department Referrals: The Department Referral field included “None” entries, lacking clarity on whether these reflect valid missing data.
- - Satisfaction Scores: The Patient Satisfaction Score column included blank entries in multiple rows.
-
+This project provides clear, data-driven insights into these operational questions.
 
 ---
 
+## 🎯 Objectives
 
-## 📥 Data Loading
- - The dataset was imported into Excel using the following path: Data tab → Get Data → From File → From Text/CSV.
- - In the Navigator window, the file preview was verified to ensure correct column alignment and data types.
- - The data was then loaded into Power Query Editor for cleaning and transformation before being added to the data model.
+- Clean raw ER data using Power Query  
+- Build a data model using Power Pivot  
+- Create calculated columns and DAX measures  
+- Develop interactive KPIs and visualizations  
+- Identify insights across demographics, wait times, referrals, and satisfaction  
 
 ---
 
+## 📁 Dataset Overview
+
+**Records:** 9,216  
+**Columns:** 11  
+**Format:** CSV  
+**Period:** April 2023 – October 2024  
+
+### Key Columns
+
+- Admission DateTime  
+- Gender  
+- Age  
+- Wait Time  
+- Admission Flag  
+- Department Referral  
+- Satisfaction Score  
+- Patient name fields (merged during cleaning)
+
+---
 
 ## 🧹 Data Cleaning and Transformation
+Performed using Power Query.
 
+### Standardization
+- Normalized Gender values  
+- Split Date and Time into separate fields  
+- Created Age Groups (0–19, 20–29, ..., 70–79)  
+- Converted True/False admission flag to text  
+- Cleaned “None” values in Referral column  
+- Removed duplicate Wait Time column  
+- Merged First Name and Last Name columns  
 
-The dataset underwent several cleaning and transformation steps in Power Query to ensure consistency, accuracy, and alignment with the project’s KPIs:
-
-<details>
-<summary><strong>1. Error and Column Quality Check</strong></summary>
-
-<br>
-
-  - Used the Column Quality feature under the View tab to identify errors and missing values.
-  - Found blanks in the Patient Satisfaction Score column. These were retained to preserve data integrity.
-</details>
-
-    
-<details>
-<summary><strong>2. Splitting Admission Date and Time</strong></summary>
-
-<br>
-
-  - The Patient Admission Date column contained both date and time.
-  - Used: Transform tab → Split Column → By Delimiter → Custom delimiter: space → Split at each occurrence.
-  - Removed the time column, as it was not required for analysis.
-</details>
-
-<details>
-<summary><strong>3. Date Calendar Creation</strong></summary>
-
-<br>
-
-  - Created a dynamic Date Calendar using a blank query: Home → New Source → Other Sources → Blank Query
-  - Applied the formula:
-
-  ```= List.Dates(#date(2023, 01, 01), 731, #duration(1, 0, 0, 0))```
-  
-  - #date(2023, 01, 01): Start date.
-  - 731: Covers two full years (including leap year).
-  - #duration(1, 0, 0, 0): Daily intervals.
-  - Converted the list to a table using To Table under the Transform tab.
-  - Renamed the column and query to Date Calendar, set the data type to Date.
-  - Loaded it as a connection-only query and added it to the data model.
-  - Created a relationship with the fact table using Manage Data Model in Diagram View.
-</details>
-    
-<details>
-<summary><strong>4. Merging Name Columns</strong></summary>
-
-<br>
-
-  - Merged First Name and Last Name using: Transform tab → Merge Columns → Separator: Custom (. ) → Result: e.g., H. Hamilton
-  - Renamed the new column to Full Name.
-</details>
-
-<details>
-<summary><strong>5. Gender Normalization</strong></summary>
-
-<br>
-
-  - Standardized inconsistent gender values (M, F, Male, Female) using Replace Values in the Transform tab.
-</details>
-
-<details>
-<summary><strong>6. Creating Age Groups</strong></summary>
-
-<br>
-
-  - Added a new column using Add Column → Conditional Column to group patients by age brackets.
-    ![image](https://github.com/aslamshkh/Hospital-Emergency-Room-Analysis/blob/main/Conditional%20Column%20Creation.png)
-</details>
-
-<details>
-<summary><strong>7. Admission Status Formatting</strong></summary>
-
-<br>
-
-  - Converted the Admission Flag column from Boolean to Text.
-  - Replaced True with Admitted and False with Not Admitted.
-</details>
-
-<details>
-<summary><strong>8. Wait Time Categorization</strong></summary>
-
-<br>
-
-  - Created a new column using Add Column → Custom Column to classify patients based on whether they were attended within or beyond 30 minutes.
-    ![image](https://github.com/aslamshkh/Hospital-Emergency-Room-Analysis/blob/main/Waittime%20Categorisation.png)
-</details>
-
-<details>
-<summary><strong>9. Removing Duplicate Columns</strong></summary>
-
-<br>
-
-  - Identified and removed a duplicate Admission Flag column using Remove Columns under the Home tab.
-</details>
+### Additional Transformations
+- Created a full Date Table  
+- Created WaitTime Category (In Time vs Delayed)  
+- Removed unnecessary columns  
+- Checked for blank Satisfaction Scores (left untouched for transparency)
 
 ---
 
- 
-## 💡 Data Exploration And Key Insights
+## 📐 DAX Measures
+Used inside Power Pivot to drive KPIs.
 
+```DAX
+Total Patients := COUNTROWS(PatientData)
 
-After cleaning and transforming the dataset in Power Query, I used PivotTables built from the Power Pivot data model to explore core metrics related to patient flow, wait time efficiency, satisfaction, and referral patterns. These findings shaped the KPI selection and dashboard layout, turning raw observations into actionable insights.
+Average Wait Time := AVERAGE(PatientData[Wait Time])
 
-### Key Insights
+Admission Rate :=
+DIVIDE(CALCULATE(COUNTROWS(PatientData), PatientData[Admission Flag] = TRUE),
+    [Total Patients])
 
- - Patient Volume: A total of 9,216 emergency visits were recorded between April 2023 and October 2024. Daily traffic ranged from 20 to 45, reflecting steady ER utilization without major fluctuations.
- - Admission Trends: The patient distribution was nearly equal, with 50.04% admitted and 49.96% not admitted—indicating a balanced triage outcome.
- - Wait Time Distribution: About 62% of patients experienced delays, waiting over 30 minutes, while 38% were attended within 30 minutes. This points to potential efficiency gaps in initial patient intake.
- - Satisfaction Scores: Despite the wait times, the average patient satisfaction score remained high at 4.99, suggesting that care quality or communication may have positively influenced perception.
- - Demographic Breakdown:
- - Gender: Nearly even split 4,729 male and 4,487 female patients.
- - Age: The highest concentration of visits came from patients aged 60–79, aligning with common ER usage trends in older populations.
- - Referral Analysis: The most common referring departments were General Practice, Orthopedics, and Physiotherapy. A significant portion of entries were marked “None,” likely reflecting either self-referrals or missing documentation.
+Average Satisfaction := AVERAGE(PatientData[Satisfaction Score])
 
+InTime Patients := CALCULATE([Total Patients], PatientData[WaitTime Category] = "In Time")
 
-
-> [!WARNING]
-> Some patients had recorded wait times exceeding 180 minutes, which might be considered unusually long. As this is an independently executed project with no external source verification, these values have been left untouched and are reported as-is for transparency.
+Delayed Patients := CALCULATE([Total Patients], PatientData[WaitTime Category] = "Delayed")
+```
 
 ---
 
-## 🛠️ Dashboard Creation
+## 📊 Key Insights
 
+### Patient Volume
+- 9,216 visits recorded  
+- Daily traffic between 20–45 patients  
 
-The dashboard was built in Excel with a clean, high-contrast design for better readability and user interaction. Key formatting steps included:
- - Zoom set to 100% and gridlines removed for a streamlined view.
- - A dark background to highlight visuals and slicers.
- - Slicers for Gender, Age Group, Admission Status, and Department to enable quick filtering.
+### Wait Time
+- 38% attended within 30 minutes  
+- 62% experienced delays  
 
-### Visual Overview
- - KPI Cards: Displayed patient volume, satisfaction, and wait time breakdown for instant insights.
- - Bar Charts: Showed patient count by age group and referral sources.
- - Stacked Columns: Compared admission rates across age groups.
- - Pie & Doughnut Charts: Illustrated gender split and wait time proportions.
- - Satisfaction Comparison: Highlighted how wait time affected patient feedback.
+### Admission Patterns
+- 50.04% admitted  
+- 49.96% not admitted  
 
-All visuals were arranged logically to guide the reader from big-picture metrics to deeper operational patterns.
-  
-   
-   ![image](https://github.com/aslamshkh/Hospital-Emergency-Room-Analysis/blob/main/Hospital%20Emergency%20Room%20Dashboard.png)
+### Satisfaction
+- Average Satisfaction Score = 4.99  
 
+### Demographics
+- Gender split: 4,729 Male, 4,487 Female  
+- Highest visits from age group 70–79  
 
-   
+### Referral Patterns
+Top referring departments:
+1. General Practice  
+2. Orthopedics  
+3. Physiotherapy  
+
+Large number of “None” entries indicate walk-ins or missing data.
+
+---
+
+## 🖥 Dashboard Features
+- KPI Cards for:
+  - Total Patients  
+  - Average Wait Time  
+  - Average Satisfaction  
+  - Admission Rate
+    
+- Slicers for:
+  - Year  
+  - Month  
+  - Gender  
+  - Age Group  
+  - Admission Status  
+  - Department
+    
+- Charts:
+  - Age Group Bar Chart  
+  - Admission Comparison Chart  
+  - Gender Pie Chart  
+  - Wait-Time Doughnut Chart  
+  - Referral Count Bar Chart  
+
+---
+
+## 📂 Project Files
+```
+Hospital_Emergency_Room_Analysis/
+│
+├── Hospital Emergency Room Project.xlsx
+├── Hospital Emergency Room Data Raw.csv
+├── Hospital Emergency Room Dashboard.png
+├── Dashboard Layout.png
+├── Conditional Column Creation.png
+├── WaitTime Categorisation.png
+├── Hospital Logo.png
+└── README.md
+```
+
+---
+
+## 🧭 How to Use
+
+1. Download the Excel project file.  
+2. Open in Excel (2016 or later).  
+3. Ensure Power Query and Power Pivot are enabled.  
+4. Refresh data connections.  
+5. Navigate to the Dashboard sheet.  
+6. Use slicers to interact with the visuals.  
+
+---
+
+## ⚠ Limitations
+
+- Missing satisfaction scores in some rows  
+- Some wait times exceed 180 minutes (left unchanged for transparency)  
+- Dataset lacks clinical severity details  
+
+---
+
+## 🚀 Future Improvements
+
+- Migrate dashboard to Power BI  
+- Add trend analysis and forecasting  
+- Include patient flow modeling  
+- Enhance data quality rules  
+
